@@ -1,0 +1,30 @@
+{
+  "name": "audiosource",
+  "version": "0.1.0",
+  "description": "utility for managing audio buffers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meandavejustice/audiosource.git"
+  },
+  "keywords": [
+    "webaudio",
+    "audio",
+    "buffers",
+    "fft",
+    "visualizations",
+    "playback",
+    "mps",
+    "wav",
+    "ogg"
+  ],
+  "author": "meandave",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meandavejustice/audiosource/issues"
+  },
+  "homepage": "https://github.com/meandavejustice/audiosource"
+}
