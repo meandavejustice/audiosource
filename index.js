@@ -8,6 +8,7 @@ function AudioSource (context, opts) {
   if (!context) {
     throw new Error('You must pass an audio context to use this module');
   }
+  if (opts === undefined) opts = {};
 
   this.context = context;
   this.buffer = undefined;
@@ -71,7 +72,11 @@ AudioSource.prototype = {
     }
   },
   playSound: function() {
-    this.source.start(this.context.currentTime);
+    if (this.playTime) {
+      this.source.start(0, this.offset);
+    }
+
+    this.playTime = this.context.currentTime;
   },
   loadSilent: function() {
     if (!this.needBuffer()) return;
@@ -80,7 +85,10 @@ AudioSource.prototype = {
       self.onLoaded.call(self, data, true);
     });
   },
-  play: function() {
+  play: function(starttime, offset) {
+    this.playTime = starttime ? starttime : this.context.currentTime;
+    this.offset = offset ? offset : 0;
+
     if (this.needBuffer()) {
       var self = this;
       this.loadSound(this.url, function(data) {
