@@ -1,9 +1,11 @@
+module.exports = require('./lib/index.js');
+
 /*
  * AudioSource
  *
  * * MUST pass an audio context
  *
- */
+
 function AudioSource (context, opts) {
   if (!context) {
     throw new Error('You must pass an audio context to use this module');
@@ -106,4 +108,5 @@ AudioSource.prototype = {
   }
 };
 
-module.exports = AudioSource;
+module.exports = AudioSource
+*/
