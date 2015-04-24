@@ -4,9 +4,12 @@
 
 A simple utility to manage audio buffers.
 
+The goal of AudioSource is to provide a simple interface to managing playback of audio source nodes. This includes
+tracking playback times, pause, resume, stop, and seeking.
+
 ## Usage
 
-Initialize:
+### Initialize:
 
 ``` javascript
 var AudioSource = require('audiosource');
@@ -25,7 +28,7 @@ var src = new AudioSource({
 
 *note* "ffts" refers to [this](https://github.com/meandavejustice/audio-fft)x
 
-Load Audio:
+### Load Audio:
 
 ``` javascript
 var AudioSource = require('audiosource');
@@ -40,7 +43,7 @@ src.load(null, function(err, src) { // optionally takes a url and callback
   src.play();
 });
 ```
-Playback:
+### Playback:
 
 ``` javascript
 
@@ -61,7 +64,14 @@ src.load(null, function(err, src) {
 });
 ```
 
-Insight:
+### Insight:
+
+There are a couple of ways to get insight into playback.
+
+Useful Properties:
+* `playing` Boolean
+* `buffer` [audio buffer](http://www.w3.org/TR/webaudio/#AudioBuffer)
+* `source` [audio source](http://www.w3.org/TR/webaudio/#AudioBufferSourceNode)
 
 ``` javascript
 
@@ -71,34 +81,30 @@ src.load(null, function(err, src) {
   src.play();
 
   src.time();
-
-/*
-
-returns Time object. Example:
-
-{
-  current: 2.048,
-  remaining: 3.01975,
-  percent: "40.41%",
-  total: 5.06775
-}
-
-*/
-
 });
+```
+
+`src.time()` returns:
+``` json
+{
+  "current": 2.048,
+  "remaining": 3.01975,
+  "percent": "40.41%",
+  "total": 5.06775
+}
 ```
 AudioSource is also an [EventEmitter](https://iojs.org/api/events.html#events_class_events_eventemitter)
 
-Available Events:
-* play
-* pause
-* load
-* stop
-* pause
-* skip
-* back
-* remove
-* time
+Events:
+* `play`
+* `pause`
+* `load`
+* `stop`
+* `pause`
+* `skip`
+* `back`
+* `remove`
+* `time`
 
 ``` javascript
 
@@ -111,7 +117,7 @@ src.load();
 
 All events (with exception to error) emit the time object.
 
-#LICENSE
+# LICENSE
 
 The MIT License (MIT)
 
