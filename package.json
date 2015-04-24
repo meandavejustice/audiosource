@@ -1,23 +1,30 @@
 {
   "name": "audiosource",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "utility for managing audio buffers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "browser-test": "beefy test/manual.js -- -t babelify && open http://localhost:9966",
+    "test": "echo \"npm run browser-test to run manual tests\" && exit 1",
+    "prepublish": "babel es6 --out-dir lib"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/meandavejustice/audiosource.git"
   },
   "keywords": [
+    "audio",
+    "music",
+    "playback",
+    "samples",
     "webaudio",
     "audio",
-    "buffers",
+    "buffer",
+    "game",
     "fft",
     "visualizations",
     "playback",
-    "mps",
+    "mp3",
     "wav",
     "ogg"
   ],
@@ -26,5 +33,14 @@
   "bugs": {
     "url": "https://github.com/meandavejustice/audiosource/issues"
   },
-  "homepage": "https://github.com/meandavejustice/audiosource"
+  "homepage": "https://github.com/meandavejustice/audiosource",
+  "devDependencies": {
+    "audiocontext": "^0.1.0",
+    "babel": "^5.1.11",
+    "babelify": "^6.0.2",
+    "beefy": "^2.1.5"
+  },
+  "dependencies": {
+    "xhr": "^2.0.1"
+  }
 }
