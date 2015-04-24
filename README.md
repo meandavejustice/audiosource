@@ -26,7 +26,7 @@ var src = new AudioSource({
 });
 ```
 
-*note* "ffts" refers to [this](https://github.com/meandavejustice/audio-fft)x
+*note* "ffts" refers to [this package](https://github.com/meandavejustice/audio-fft)
 
 ### Load Audio:
 
