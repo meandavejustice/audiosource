@@ -6,7 +6,7 @@
   "scripts": {
     "browser-test": "beefy test/manual.js -- -t babelify && open http://localhost:9966",
     "test": "echo \"npm run browser-test to run manual tests\" && exit 1",
-    "prepublish": "babel src --out-dir lib"
+    "prepublish": "babel es6 --out-dir lib"
   },
   "repository": {
     "type": "git",
