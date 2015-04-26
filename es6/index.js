@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import raf from 'raf';
 import xhr from 'xhr';
 
 export default class AudioSource extends EventEmitter {
@@ -90,14 +91,14 @@ export default class AudioSource extends EventEmitter {
     this._setup(this.buffer); // get a fresh buffer
     this.source.start(0, offset);
     this.playing = true;
-    this.interval = setInterval(this._broadcastTime.bind(this), 0);
+    this.interval = raf(this._broadcastTime.bind(this));
     this.emit('play', this.time());
   }
 
   _stop() {
     this.source.stop(this.context.currentTime);
     this.playing = false;
-    this.interval = clearInterval(this.interval);
+    this.interval = raf.cancel(this.interval);
   }
 
   stop() {
@@ -151,6 +152,9 @@ export default class AudioSource extends EventEmitter {
   _broadcastTime() {
     let time = this.time();
     if (time.current > time.total) this.stop();
-    else this.emit('time', time);
+    else {
+      this.emit('time', time);
+      raf(this._broadcastTime.bind(this));
+    }
   }
 }

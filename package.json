@@ -1,6 +1,6 @@
 {
   "name": "audiosource",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "utility for managing audio buffers",
   "main": "index.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "beefy": "^2.1.5"
   },
   "dependencies": {
+    "raf": "^2.0.4",
     "xhr": "^2.0.1"
   }
 }
