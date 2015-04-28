@@ -1,6 +1,8 @@
 import EventEmitter from 'events';
 import raf from 'raf';
 import xhr from 'xhr';
+import fs from 'fs';
+import path from 'path';
 
 export default class AudioSource extends EventEmitter {
   constructor(opts) {
@@ -18,13 +20,36 @@ export default class AudioSource extends EventEmitter {
     this._init = true; // switch for initial play
   }
 
-  load(url, cb) {
+  _toArrayBuffer(buffer) {
+    var ab = new ArrayBuffer(buffer.length);
+    var view = new Uint8Array(ab);
+    for (var i = 0; i < buffer.length; ++i) {
+      view[i] = buffer[i];
+    }
+    return ab;
+  }
+
+  load(url, cb, isFile) {
     if (typeof url === 'function') cb = url;
     else if (url) this.url = url;
 
     if (!this.url) throw new Error('You must pass a url or have instantiated the class with the url option to call "AudioSource.load"');
     if (!this.listeners('load').length && !cb) console.warn('No callback passed to Load method, nor listener set up for "load" event.');
     this._req(cb);
+  }
+
+  read(filepath, cb) {
+    if (typeof filepath == 'function') cb = filepath;
+    else this.url = filepath;
+    if (cb) this._mycb = cb;
+    fs.readFile(path.resolve(filepath), function(err, buffer) {
+     if (err) this._fail(err);
+     this.context.decodeAudioData(this._toArrayBuffer(buffer), function(buffer) {
+        this.buffer = buffer;
+        this.emit('load', this.time());
+        if (this._mycb) this._mycb(null, this);
+      }.bind(this), this._fail.bind(this));
+    }.bind(this))
   }
 
   disconnect() {
@@ -72,12 +97,17 @@ export default class AudioSource extends EventEmitter {
       uri: this.url,
       responseType: 'arraybuffer'
     }, (err, resp, body) => {
-      if (err) this._fail(err);
-      this.context.decodeAudioData(body, function(buffer) {
-        this.buffer = buffer;
-        this.emit('load', this.time());
-        if (this._mycb) this._mycb(null, this);
-      }.bind(this), this._fail.bind(this));
+      if (err) {
+        err = null;
+        this.read(this.url, cb);
+      }
+      else {
+        this.context.decodeAudioData(body, function(buffer) {
+          this.buffer = buffer;
+          this.emit('load', this.time());
+          if (this._mycb) this._mycb(null, this);
+        }.bind(this), this._fail.bind(this));
+      }
     }.bind(this));
   }
 

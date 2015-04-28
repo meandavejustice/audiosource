@@ -30,6 +30,10 @@ var src = new AudioSource({
 
 ### Load Audio:
 
+Load from an xhr request or from file(useful when running in an electron app).
+
+`load` falls back to `read` if xhr request fails
+
 ``` javascript
 var AudioSource = require('audiosource');
 var context = new AudioContext();
@@ -39,6 +43,11 @@ var src = new AudioSource({
 });
 
 src.load(null, function(err, src) { // optionally takes a url and callback
+  if (err) console.error('ya goofed... ', err);
+  src.play();
+});
+
+src.read('path/to/file.ogg', function(err, src) { // takes a filepath and an optional callback
   if (err) console.error('ya goofed... ', err);
   src.play();
 });
