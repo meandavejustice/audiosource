@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/meandavejustice/audiosource",
   "devDependencies": {
+    "audio-fft": "^0.1.0",
     "audiocontext": "^0.1.0",
     "babel": "^5.1.11",
     "babelify": "^6.0.2",

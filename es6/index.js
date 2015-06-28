@@ -77,7 +77,7 @@ export default class AudioSource extends EventEmitter {
 
       // hook up analyser nodes
       this.nodes.forEach(node => {
-        if (node.hasOwnProperty('fftSize')) node.connect(context.destination);
+        if (node.input.hasOwnProperty('fftSize')) node.connect(this.context.destination);
       });
     } else this.source.connect(this.context.destination);
   }
