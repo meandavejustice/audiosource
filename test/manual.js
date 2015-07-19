@@ -2,13 +2,13 @@
  * Currently all testing for this module is done manually.
  *
  * In order to open the testing page run:
- * beefy test/manual.js -- -t babelify
+ * beefy test/manual.js
  *
  * */
 
-import AudioContext from 'audiocontext';
-import AudioSource from '../es6/index.js';
-import FFT from 'audio-fft';
+var AudioContext = require('audiocontext');
+var AudioSource = require('../index');
+var FFT = require('audio-fft');
 
 var play = document.createElement('button');
 var pause = document.createElement('button');
@@ -25,20 +25,22 @@ stop.innerText = 'stop';
 skip.innerText = 'skip';
 remove.innerText = 'remove';
 
-let context = new AudioContext();
-let gain = context.createGain();
-let fft = new FFT(context, {
+var context = new AudioContext();
+var gain = context.createGain();
+var fft = new FFT(context, {
   canvas: fftCanvas
 });
 
-let src = new AudioSource({
+var src = new AudioSource({
   context: context,
-  gainNode: gain,
-  nodes: [fft],
+  onConnect: onConnect,
   url: 'test/real.mp3' // this will fail unless you put an audio file in this dir
 });
 
-src.on('time', function(time) {console.log(time)});
+function onConnect(src) {
+  src.connect(fft.input);
+  fft.connect(context.destination);
+}
 
 src.load(null, function(err, source) {
   console.log(source.buffer.duration);
@@ -62,5 +64,5 @@ src.load(null, function(err, source) {
     src.remove();
   });
 
-  [play, skip, pause, stop, remove, fftCanvas].forEach(el => {document.body.appendChild(el)});
+  [play, skip, pause, stop, remove, fftCanvas].forEach(function(el) {document.body.appendChild(el)});
 });
