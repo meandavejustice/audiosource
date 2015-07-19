@@ -15,15 +15,20 @@ tracking playback times, pause, resume, stop, and seeking.
 var AudioSource = require('audiosource');
 var context = new AudioContext();
 var FFT = require('audio-fft');
-var ffts = [new FFT(...), new FFT(...)];
+var fft = new FFT(...);
 
 var src = new AudioSource({
   context: context, // this is just a standard web audio context REQUIRED
   url: 'path/to/audiofile.ogg', // OPTIONAL if you want to set your own webaudiobufferobject
-  gainNode: context.createGain() // OPTIONAL
-  nodes: ffts // OPTIONAL, must pass gainNode if using this option.
-  buffer: webaudiobufferobject //OPTIONAL
+  buffer: webaudiobufferobject // OPTIONAL
+  onConnect: onConnect // OPTIONAL fn to call on new source creation (if not included will autoconnect to destination)
 });
+
+function onConnect(src) {
+  src.connect(fft.input);
+  fft.connect(context.destination);
+}
+  
 ```
 
 *note* "ffts" refers to [this package](https://github.com/meandavejustice/audio-fft)
