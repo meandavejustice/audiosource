@@ -1,6 +1,6 @@
 {
   "name": "audiosource",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "utility for managing audio buffers",
   "main": "index.js",
   "scripts": {
