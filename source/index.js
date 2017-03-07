@@ -1,4 +1,4 @@
-const loadAudio = require('audio-loader');
+const xhr = require('xhr');
 
 module.exports = class Audiosource {
   constructor(options) {
@@ -72,12 +72,17 @@ module.exports = class Audiosource {
   }
 
   load(cb) {
-    loadAudio(this.srcUrl).then(buffer => {
-      this.audioBuffer = buffer;
-      this.loaded = true;
-      if (this.autoplay) this.play();
-      if (cb) cb();
-    });
+    xhr({
+      uri: this.srcUrl,
+      responseType: 'arraybuffer'
+    }, (err, resp, body) => {
+      this.context.decodeAudioData(body, function(buffer) {
+        this.audioBuffer = buffer;
+        this.loaded = true;
+        if (this.autoplay) this.play();
+        if (cb) cb();
+      });
+    })
   }
 
   play(seconds) {

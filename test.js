@@ -23,4 +23,3 @@ test('Instantiation tests', function(t) {
 
   t.equal(a.gainNode.gain.value, 0.75, 'setting volume should update gainNode value');
 });
-

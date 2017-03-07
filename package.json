@@ -1,6 +1,6 @@
 {
   "name": "audiosource",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "utility for managing audio buffers, playback, and visualizations",
   "main": "./distribution/index.js",
   "scripts": {
@@ -43,6 +43,6 @@
     "tape-worm": "0.0.3"
   },
   "dependencies": {
-    "audio-loader": "0.6.0"
+    "xhr": "2.4.0"
   }
 }
