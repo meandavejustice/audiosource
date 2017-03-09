@@ -42,10 +42,8 @@ module.exports = class Audiosource {
   }
 
   set currentTime(t) {
-    if (this.playing) {
-      this.pause();
-      this.play(t);
-    } else this.secondsAtLastPause = t;
+    if (this.playing) this.play(t);
+    else this.secondsAtLastPause = t;
   }
 
   get volume() {
@@ -76,7 +74,7 @@ module.exports = class Audiosource {
       uri: this.srcUrl,
       responseType: 'arraybuffer'
     }, (err, resp, body) => {
-      this.context.decodeAudioData(body, function(buffer) {
+      this.context.decodeAudioData(body, (buffer) => {
         this.audioBuffer = buffer;
         this.loaded = true;
         if (this.autoplay) this.play();
@@ -90,7 +88,8 @@ module.exports = class Audiosource {
     this.contextTimeAtLastPlay = this.context.currentTime;
     this._createFreshBufferSource();
     this._connectGraph();
-    this.source.start(0, seconds || this.secondsAtLastPause);
+    if (seconds) this.secondsAtLastPause = seconds;
+    this.source.start(0, this.secondsAtLastPause);
     this.playing = true;
   }
 
