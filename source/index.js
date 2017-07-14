@@ -116,6 +116,7 @@ module.exports = class Audiosource {
     this.contextTimeAtLastPlay = 0;
     this.secondsAtLastPause = 0;
     this.diffSecondsAtLastPause = 0;
+    delete this.source.buffer;
   }
 
   /*
