@@ -13,6 +13,7 @@ module.exports = class Audiosource {
 
     this.playing = false;
     this.secondsAtLastPause = 0;
+    this.diffSecondsAtLastPause = 0;
     this.contextTimeAtLastPlay = 0;
 
     if (options.onLoad) this.load(options.onLoad);
@@ -80,7 +81,7 @@ module.exports = class Audiosource {
         if (this.autoplay) this.play();
         if (cb) cb();
       });
-    })
+    });
   }
 
   play(seconds) {
@@ -88,14 +89,20 @@ module.exports = class Audiosource {
     this.contextTimeAtLastPlay = this.context.currentTime;
     this._createFreshBufferSource();
     this._connectGraph();
-    if (seconds) this.secondsAtLastPause = seconds;
+
+    if (seconds) {
+      this.secondsAtLastPause = seconds;
+      // TODO: I think that is 0
+      this.diffSecondsAtLastPause = this.context.currentTime - this.contextTimeAtLastPlay;
+    }
     this.source.start(0, this.secondsAtLastPause);
     this.playing = true;
   }
 
   pause() {
     if (this.playing) this.source.stop(this.context.currentTime);
-    this.secondsAtLastPause = this.context.currentTime - this.contextTimeAtLastPlay;
+    this.diffSecondsAtLastPause = this.context.currentTime - this.contextTimeAtLastPlay;
+    this.secondsAtLastPause = this.currentTime;
     this.playing = false;
   }
 
@@ -105,6 +112,10 @@ module.exports = class Audiosource {
     this.source.disconnect(this.analyser);
     this.source.disconnect(this.gainNode);
     this.gainNode.disconnect();
+    // clean up
+    this.contextTimeAtLastPlay = 0;
+    this.secondsAtLastPause = 0;
+    this.diffSecondsAtLastPause = 0;
   }
 
   /*
